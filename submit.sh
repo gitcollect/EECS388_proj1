@@ -35,9 +35,38 @@ diff_out part1_2_out.txt Part1_2/part1_2_correct.txt "Part 1.2"
 # copy the file to the correct directory
 copy_to_submit_folder Part1_2/len_ext_attack.py
 
-echo "Part 2.2 Sucsess"
+# Part 2.1
 cp Part2_1/generating_collisions.txt Submition/
+echo "Part 2.1 Sucsess"
 
+# Part 2.2
+
+#Tests
+# comparing the two hashes
+H1=$(openssl dgst -md5 Part2_2/good.py | grep -o '[0-9a-f]*$')
+H2=$(openssl dgst -md5 Part2_2/evil.py | grep -o '[0-9a-f]*$')
+
+echo "SSL good.py $H1"
+echo "SSL evil.py $H2"
+
+if [ $H1 != $H2 ]
+then
+    echo "The hashes are different"
+    exit 1
+else
+    echo "The hashes are the same"
+fi
+
+python Part2_2/good.py > good_test.txt
+diff_out  good_test.txt Part2_2/out_good.txt "good.py"
+
+python Part2_2/evil.py > evil_test.txt
+diff_out evil_test.txt Part2_2/out_evil.txt "evil.py"
+
+copy_to_submit_folder Part2_2/good.py
+copy_to_submit_folder Part2_2/evil.py
+
+echo "Part 2.2 Sucesss"
 
 # finaly create tar
 tar -zcf project1.coconor.cwscott.tar.gz Submition/*
