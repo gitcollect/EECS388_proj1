@@ -68,6 +68,10 @@ copy_to_submit_folder Part2_2/evil.py
 
 echo "Part 2.2 Sucesss"
 
+
+cp writeup.txt Submit/
+echo "Copying writeup.txt"
+
 # finaly create tar
 tar -zcf project1.coconor.cwscott.tar.gz Submition/*
 

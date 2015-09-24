@@ -1,0 +1,14 @@
+# Question 1
+Using HMAC avoids the length extension attack because it hashes the input, user password plus commands, twice.  Thus
+an attacker cannot append his own command with padding to make sure it is in the next block since the has been computed
+on a inner hash value.  HMAC also is less prone to collision as MD5 is vulnerable to.
+
+# Question 2
+Using collision as in Part 2.2 an attacker could install malicious software instead of the software requested.  A man in
+the middle could send a virus with the same MD5 has as something the package manager was trying to install.  When the
+package managers verifies the download with the hashed value it will seem to be valid. Using SHA256 or some other hash
+function that doesn't have the collision problem would be more secure.
+
+# Question 3
+Even with the bad way of parsing assumed in Part 3.3, with a exponent (e) of 2^16 + 1 bites the attacker would not be
+able to avoid dealing with the modules. This makes it so
