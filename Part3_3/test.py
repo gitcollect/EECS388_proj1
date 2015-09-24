@@ -8,7 +8,6 @@ __author__ = 'charlieoconor'
 url = "http://eecs388.org/project1/"
 parsed_url = urlparse.urlparse(url)
 
-
 from_account = "eecs388"
 to_account = "coconor"
 amount = 1000
@@ -21,8 +20,6 @@ request_body ={
     "amount" : str(amount),
     "signature" : forge_sig(to_sign)
 }
-
-#header = ""
 
 conn = httplib.HTTPConnection(parsed_url.hostname, parsed_url.port)
 conn.request("POST", parsed_url.path, urllib.urlencode( request_body ))

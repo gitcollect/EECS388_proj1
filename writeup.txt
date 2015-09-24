@@ -11,4 +11,5 @@ function that doesn't have the collision problem would be more secure.
 
 # Question 3
 Even with the bad way of parsing assumed in Part 3.3, with a exponent (e) of 2^16 + 1 bites the attacker would not be
-able to avoid dealing with the modules. This makes it so
+able to avoid dealing with the modules. An exponent of that size would ensure that the message would wrap around, thus
+ensuring that an attacker had to signature s with out just taking the nth root of the message m.
