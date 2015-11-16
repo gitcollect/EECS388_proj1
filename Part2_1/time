@@ -1,0 +1,9 @@
+MD5 collision generator v1.5
+by Marc Stevens (http://www.win.tue.nl/hashclash/)
+
+Using output filenames: 'file1' and 'file2'
+Using initial value: 0123456789abcdeffedcba9876543210
+
+Generating first block: .
+Generating second block: S11...............................
+Running time: 0.592266 s

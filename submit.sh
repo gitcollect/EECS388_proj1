@@ -15,7 +15,7 @@ function diff_out {
         echo "ERROR in $3"
         exit 1
     else
-        echo "  $3 success!"
+        echo "  $3 !"
         rm $1
     fi
 }
@@ -85,7 +85,12 @@ echo "Part 3.3 Sucess"
 copy_to_submit_folder writeup.txt
 echo "Copying writeup.txt"
 
+
+cp Submition/*  .
+
 # finaly create tar
-tar -zcf project1.coconor.cwscott.tar.gz Submition/*
+tar -zcf project1.coconor.cwscott.tar.gz *.py len_ext_attack.py \
+generating_collisions.txt good.py evil.py bleichenbacher.py writeup.txt
 
-
+rm *.py
+rm generating_collisions.txt

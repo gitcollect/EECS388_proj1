@@ -1,5 +1,7 @@
 import hashlib
 import sys
+# why is bitcount protected
+from roots import _bitcount
 from roots import *
 
 # the function to create a forged signature and return it
@@ -9,9 +11,9 @@ def forge_sig( message ):
 
     hash_message = hashlib.sha1(message).hexdigest()
 
-    hash_bits = 160
+    hash_bits = _bitcount(int(hash_message, 16))
 
-    forged_signature = forged_signature << 160
+    forged_signature = forged_signature << hash_bits
     forged_signature += int(hash_message, 16)
     forged_signature = forged_signature << 4
     forged_signature += 0xf

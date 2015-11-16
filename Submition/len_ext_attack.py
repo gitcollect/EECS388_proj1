@@ -17,9 +17,8 @@ def len_ext_attack(url, command_to_add, user_password_length):
     parameters_list = urlparse.parse_qsl(parsedUrl.query)
     parameters = dict(parameters_list)
 
-    # HERE
-    # did not have the -1 before
-    command_to_add = "&command" + str(len(parameters) - 1) + "=" + command_to_add
+    # parse the command
+    command_to_add = "&command" + str(len(parameters)) + "=" + command_to_add
 
     if "token" not in parameters:
         # if there isn't a token in the parameters quit the program
